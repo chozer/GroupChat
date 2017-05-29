@@ -11,16 +11,18 @@ public class frame extends Frame implements ActionListener{
 	PrintWriter out;
 	Button send = new Button("send");
 	static String s = "";
-	public frame(Socket cilent){
+	public frame(){
 		setTitle("cilent");
+
 		setLayout(new BorderLayout());
 		this.addWindowListener(new WinCilent(this));
 		send.addActionListener(this);
-		text = new TextArea(20,50);
-		rece = new TextArea(20,50);
-		add("South",send);
-		add("Center",text);
-		//add("Center",rece);
+		text = new TextArea(40,60);
+		rece = new TextArea(10,50);
+		send.setSize(WIDTH, 30);
+		add(send,BorderLayout.SOUTH);
+		add(text,BorderLayout.CENTER);
+		add(rece,BorderLayout.NORTH);
 		setVisible(true);
 	}
 	/*public void mousePressde(MouseEvent e){
@@ -33,13 +35,12 @@ public class frame extends Frame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		s = text.getText();
-		text.append("get");
 	}
-	public static String get(){
+	public  static String get(){
 		return s;
 	}
 	
-	public static  void put(String msg){
+	public static void put(String msg){
 		rece.append(msg+"\n");
 	}	
 }

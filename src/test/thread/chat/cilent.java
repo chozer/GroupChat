@@ -11,13 +11,12 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 public class cilent {
-	public boolean isSend = false;
 	public static void main(String[] args) {
 		try {
 			InetAddress addr = InetAddress.getByName("LAPTOP-R10M96M9");
 			System.out.println(addr.getHostName());
 			Socket cilent = new Socket(addr,8888);
-			frame frame = new frame(cilent);
+			new frame();
 			new Thread(new send(cilent)).start();
 			new Thread(new receive(cilent)).start();
 		} catch (IOException e) {
@@ -64,8 +63,12 @@ class send implements Runnable{
 			if( m.equals(s) )
 				return ; 
 			
-			s = m;*/
-			String msg = getConsole();
+			s = m;
+			String msg = getConsole();*/
+			//String msg = frame.get();
+			
+			String msg = frame.s;
+			System.out.println(msg);
 			if(msg != null && !msg.equals("")){
 				//out.writeUTF(name);
 				//System.out.println("猴赛雷");
@@ -100,10 +103,12 @@ class receive implements Runnable{
 	}
 	//接收数据
 	public void receive1() {
+		String mes = "";
 		try {
-			//frame.put(in.readUTF());
-			
-			System.out.println(in.readUTF());
+			mes = in.readUTF();
+			if(!mes.equals(""))
+				frame.put(mes);
+			//System.out.println(in.readUTF());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			closeutil.closeAll(in);
