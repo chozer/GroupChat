@@ -36,7 +36,7 @@ public class frame extends Frame implements ActionListener{
 		sname.setLayout(new GridLayout(2,1));
 		send = new Button("send");
 		sign = new Button("change");
-		this.addWindowListener(new WinCilent(this));
+		this.addWindowListener(new WinCilent(this,cilent));
 		send.addActionListener(this);
 		sign.addActionListener(this);
 		text = new TextArea(40,60);
@@ -58,7 +58,6 @@ public class frame extends Frame implements ActionListener{
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(sign)){
 			name = tname.getText();
-			System.out.println(name);
 		}
 		if(e.getSource().equals(send)){
 			
@@ -86,10 +85,18 @@ public class frame extends Frame implements ActionListener{
 
 class WinCilent extends WindowAdapter{
 	frame me;
-	WinCilent(frame m){
+	Socket ce;
+	WinCilent(frame m,Socket cilent){
 		me = m;
+		ce = cilent;
 	}
 	public void windowClosing(WindowEvent e){
+		try {
+			ce.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		me.disable();
 		System.exit(0);
 	}
