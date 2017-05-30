@@ -8,12 +8,13 @@ import java.net.Socket;
 public class frame extends Frame implements ActionListener{
 	static TextArea text;
 	static TextArea rece;
-	PrintWriter out;
+	//PrintWriter out;
 	Button send = new Button("send");
 	static String s = "";
-	public frame(){
+	//Send sen;
+	DataOutputStream out ;
+	public frame(Socket cilent) throws IOException{
 		setTitle("cilent");
-
 		setLayout(new BorderLayout());
 		this.addWindowListener(new WinCilent(this));
 		send.addActionListener(this);
@@ -24,6 +25,10 @@ public class frame extends Frame implements ActionListener{
 		add(text,BorderLayout.CENTER);
 		add(rece,BorderLayout.NORTH);
 		setVisible(true);
+		//new Thread(new Send(cilent)).start();
+		//sen = new Send();
+		out = new DataOutputStream(cilent.getOutputStream());
+		new Thread(new Receive(cilent)).start();
 	}
 	/*public void mousePressde(MouseEvent e){
 		
@@ -35,6 +40,13 @@ public class frame extends Frame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		s = text.getText();
+		//sen.send1();
+		try {
+			out.writeUTF(s);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	public  static String get(){
 		return s;

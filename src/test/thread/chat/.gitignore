@@ -7,3 +7,5 @@
 /server$chat.class
 /server.class
 /Frame.class
+/Send.class
+/Receive.class

@@ -72,7 +72,7 @@ public class server {
 			return ;
 		}
 		try {
-			out.writeUTF("new "+mes+" response");
+			out.writeUTF(mes);
 			out.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
