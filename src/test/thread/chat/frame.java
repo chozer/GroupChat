@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
+import java.sql.SQLException;
 
 public class frame extends Frame implements ActionListener{
 	static TextArea text;
@@ -12,24 +13,21 @@ public class frame extends Frame implements ActionListener{
 	Button sign;
 	TextField tname;
 	Panel sname;
+	List list;
+	ConNet con;
+	ConBase conbase;
+	Socket cilent;
 	static String s = "";
-	static String name = "x";
+	static String name ;
 	DataOutputStream out ;
-	/*public void sframe(){
-		
-		setTitle("Login");
-		setLayout(new GridLayout(1,3));
-		Label name = new Label("name");
-		sign = new Button("sign");
-		tname = new TextField();
-		this.addWindowListener(new WinCilent(this));
-		sign.addActionListener(this);
-		add(name);
-		add(tname);
-		add(sign);
-		setVisible(true);
-	}*/
-	public frame(Socket cilent) throws IOException{
+
+	public frame(String name) throws IOException, SQLException{
+		this.name = name;
+		con =new  ConNet();
+		conbase = new ConBase();
+		cilent = con.Connection();
+		//在数据库中插入mac地址
+		conbase.insetIp(name, cilent.getInetAddress().getHostName());
 		setTitle("Cilent");
 		setLayout(new BorderLayout());
 		sname = new Panel();
@@ -39,13 +37,15 @@ public class frame extends Frame implements ActionListener{
 		this.addWindowListener(new WinCilent(this,cilent));
 		send.addActionListener(this);
 		sign.addActionListener(this);
+		list = new List(10);
 		text = new TextArea(40,60);
 		rece = new TextArea(10,50);
 		tname = new TextField();
 		send.setSize(WIDTH, 30);
-		sname.add(tname,BorderLayout.NORTH);
+		/*sname.add(tname,BorderLayout.NORTH);
 		sname.add(sign, BorderLayout.SOUTH);
-		add(sname,BorderLayout.WEST);
+		add(sname,BorderLayout.WEST);*/
+		//add(list,BorderLayout.EAST);
 		add(rece,BorderLayout.NORTH);
 		add(text,BorderLayout.CENTER);
 		add(send,BorderLayout.SOUTH);
@@ -56,9 +56,9 @@ public class frame extends Frame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource().equals(sign)){
+		/*if(e.getSource().equals(sign)){
 			name = tname.getText();
-		}
+		}*/
 		if(e.getSource().equals(send)){
 			
 			s = text.getText();
@@ -90,6 +90,7 @@ class WinCilent extends WindowAdapter{
 		me = m;
 		ce = cilent;
 	}
+	
 	public void windowClosing(WindowEvent e){
 		try {
 			ce.close();
@@ -97,7 +98,7 @@ class WinCilent extends WindowAdapter{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		me.disable();
+		me.dispose();
 		System.exit(0);
 	}
 }

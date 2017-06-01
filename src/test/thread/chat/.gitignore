@@ -9,3 +9,9 @@
 /Frame.class
 /Send.class
 /Receive.class
+/ConNet.class
+/SignFrame.class
+/ConBase.class
+/PopFrame.class
+/WinError.class
+/WinSign.class
