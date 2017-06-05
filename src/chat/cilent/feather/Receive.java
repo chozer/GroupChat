@@ -21,9 +21,21 @@ class Receive implements Runnable{
 		String mes = "";
 		try {
 			mes = in.readUTF();
-			if(!mes.equals(""))
+			//接收婴儿名单
+			if(mes.equals("list@$#")){
+				while(!(mes = in.readUTF()).equals("@$#list"))
+					frame.putList(mes);	
+			//接收老人名单
+			}else if(mes.equals("@list$#")){
+				while(!(mes = in.readUTF()).equals("$#list@"))
+					frame.rmList(mes);	
+			}else if(mes.startsWith("chat*")){
+				String[] me = null;
+				me = mes.split("\\*");
+				
+				frame.put("Chat~"+me[1]+"-tell:"+me[2]);
+			}else if(!mes.equals(""))
 				frame.put(mes);
-			//System.out.println(in.readUTF());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			closeutil.closeAll(in);

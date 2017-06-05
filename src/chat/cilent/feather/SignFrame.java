@@ -7,9 +7,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.Socket;
-import java.sql.SQLException;
+
 
 public class SignFrame extends Frame implements ActionListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Label La1;
 	Label La2;
 	TextField name;
@@ -32,7 +36,7 @@ public class SignFrame extends Frame implements ActionListener{
 		
 		setTitle("sign");
 		setLayout(new BorderLayout());
-		setSize(400,110);
+		setSize(300,110);
 		u = new Panel();
 		s = new Panel();
 		si = new Panel();
@@ -58,6 +62,7 @@ public class SignFrame extends Frame implements ActionListener{
 		add(si,BorderLayout.SOUTH);
 		sign_up.addActionListener(this);
 		sign_in.addActionListener(this);
+		
 		setVisible(true);
 		}
 	public void actionPerformed(ActionEvent e){
@@ -87,7 +92,7 @@ public class SignFrame extends Frame implements ActionListener{
 			
 				try {
 					//检测用户是否存在
-					if(log.register(name.getText(), pass.getText())){
+					if(!log.register(name.getText(), pass.getText())){
 						new PopFrame(name.getText());
 					}
 					else{

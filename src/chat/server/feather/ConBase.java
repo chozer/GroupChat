@@ -40,7 +40,7 @@ public class ConBase {
     	Statement seach_sign_up;
     	ResultSet rss;
     	seach_sign_up = con.createStatement();
-    	rss = seach_sign_up.executeQuery("SELECT name,pass FROM user");
+    	rss = seach_sign_up.executeQuery("SELECT name FROM user");
     	while(rss.next()){
     		if(rss.getString(1).equals(uname))
     			flag = true;
@@ -85,7 +85,7 @@ public class ConBase {
     	int i = 0;
     	Statement seaUserin =con.createStatement();
     	ResultSet userIn;
-    	userIn = seaUserin.executeQuery("SELECT name FROM user WHERE login = true ");
+    	userIn = seaUserin.executeQuery("SELECT name FROM user WHERE login = 'true' ");
     	while(userIn.next()){
     		userin[i] = userIn.getString(1);
     		i++;

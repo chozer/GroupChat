@@ -17,9 +17,7 @@ public class LogDevice {
 //登陆
 	//验证用户信息
 	public boolean login(String name,String pass) throws IOException{
-		out.writeInt(1);
-		out.writeUTF(name);
-		out.writeUTF(pass);
+		out.writeUTF("1,"+name+","+pass);
 		return in.readBoolean();
 	}
 	//在线冲突检测
@@ -28,9 +26,7 @@ public class LogDevice {
 	}
 //注册
 	public boolean register(String name,String pass) throws IOException{
-		out.writeInt(2);
-		out.writeUTF(name);
-		out.writeUTF(pass);
+		out.writeUTF("2,"+name+","+pass);
 		return in.readBoolean();
 	}
 //登出

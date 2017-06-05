@@ -12,7 +12,9 @@ public class LandDetec {
 	ConBase con;
 	Socket cilent;
 	String uname;
+	boolean flag;
 	public LandDetec(Socket cilent) throws IOException{
+		flag = false;
 		this.cilent = cilent;
 		in = new DataInputStream(cilent.getInputStream());
 		out = new DataOutputStream(cilent.getOutputStream());
@@ -20,26 +22,26 @@ public class LandDetec {
 	}
 	//功能选择器
 	public void select() throws IOException, SQLException{
-		int f = in.readInt();
-		if(f==1)
-			login();
-		if(f==2)
-			register();
+		while(!flag){
+			String f = in.readUTF();
+			if(f.startsWith("1,"))
+				login(f);
+			if(f.startsWith("2,"))
+				register(f);
+		}
+		
 	}
 	//登陆_1
-	public void login() throws IOException, SQLException{
+	public void login(String mes) throws IOException, SQLException{
 		String name;
 		String pass;
-		
-		boolean flag = false;
-		while(!flag){
-			name = in.readUTF();
-			pass = in.readUTF();
+		String[] info;
+			info = mes.split(",");
+			name = info[1];
+			pass = info[2];
 			if(con.search(name, pass)){
-				System.out.println(name+"-"+pass);
 				out.writeBoolean(true);
 				if(!con.seaLog(name)){
-					System.out.println(name+","+pass);
 					con.login(name);
 					this.uname = name;
 					//在数据库中插入mac地址
@@ -50,16 +52,22 @@ public class LandDetec {
 					out.writeBoolean(true);		
 			}else
 				out.writeBoolean(false);
-		}
+		
 	}
 	//注册_2
-	public void register() throws IOException, SQLException{
+	public void register(String mes) throws IOException, SQLException{
 		String name;
 		String pass;
-		name = in.readUTF();
-		pass = in.readUTF();
-		if(!con.seaLog(name)){
+		String[] info;
+		info = mes.split(",");
+		name = info[1];
+		pass = info[2];
+		if(!con.search(name)){
 			con.insert(name, pass);
+			con.login(name);
+			//在数据库中插入mac地址
+			con.insetIp(name, cilent.getInetAddress().getHostName());
+			flag = true;
 			this.uname = name;
 			out.writeBoolean(true);
 		}else

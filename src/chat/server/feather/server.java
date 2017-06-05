@@ -7,7 +7,7 @@ import java.util.*;
 public class server {
 	
 	private List <chat> list = new ArrayList<chat>();
-	//private List <String> namelist = new ArrayList<String>();
+	private List <String> namelist = new ArrayList<String>();
 		public static void main(String[] args){
 			try {
 				new  server().start();
@@ -18,7 +18,7 @@ public class server {
 		}
 		
 		
-	private void start() throws IOException, SQLException{
+	private void start() throws Exception{
 		ConBase con;
 		ServerSocket server = new ServerSocket(8888);
 			while(true){
@@ -27,10 +27,10 @@ public class server {
 				System.out.println(cilent.getInetAddress()+"linking");
 				chat chat = new chat(cilent);
 				System.out.println(cilent.getInetAddress().getHostName());
-				chat.name = con.seachName(cilent.getInetAddress().getHostName());
 				list.add(chat);
-				//namelist.add(chat.name);
+				namelist.add(chat.name);
 				new Thread(chat).start();
+				new Thread(new MetanList(cilent)).start();
 			}
 	}
 		
@@ -45,9 +45,13 @@ public class server {
 	*/
 	LandDetec land;
 	Socket cilent;
+	MetanList metalist;
+	
 	private DataInputStream in ;
 	private DataOutputStream out;
 	private String name;
+	String[] userlist;
+	
 	private boolean Running = true;
 	chat(Socket cilent) {
 		try {
@@ -57,10 +61,11 @@ public class server {
 			out = new DataOutputStream(cilent.getOutputStream());
 			land = new LandDetec(cilent);
 			land.select();
+			this.name = land.uname;
 			/*
 			//建立udp套接字，用于接收用户名
 			udp = new DatagramSocket(5678);*/
-		} catch (IOException | SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Running = false;
 			closeutil.closeAll(in,out);
@@ -111,9 +116,7 @@ public class server {
 		}
 	}
 	//发送给其他客户端
-	private void sendOther() throws IOException{
-		String mes = this.recieve();
-		System.out.println(mes);
+	private void sendOther(String mes) throws IOException{
 		//下线检测
 		if(mes.equals("logout*$#@%@#$@#$%!@#^^&*$%#")){
 			try {
@@ -123,13 +126,24 @@ public class server {
 				e.printStackTrace();
 			}
 			cilent.close();
+		}else if(mes.startsWith("to-")){
+			String[] me = null;
+			me = mes.split("-|:");
+			for(String user:namelist){
+				if(user.equals(me[1])){
+					System.out.println(me[3]+"-"+me[2]);
+					list.get(namelist.indexOf(user)).send("chat*"+me[3]+"*"+me[2]);
+				}
+			}
+		}else{
+			for(chat temp:list){
+				if(temp == this)
+					continue;
+				else
+					temp.send(mes);
+			}			
 		}
-		for(chat temp:list){
-			if(temp == this)
-				continue;
-			else
-				temp.send(mes);
-		}
+
 	}
 	/*
 	//私聊
@@ -145,7 +159,8 @@ public class server {
 		
 		while(Running){
 			try {
-				sendOther();
+				sendOther(this.recieve());
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
