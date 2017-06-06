@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.sql.*;
+import java.util.Arrays;
 
 public class MetanList extends Thread{
 	ConBase con ;
@@ -32,16 +33,7 @@ public class MetanList extends Thread{
 	}
 	//查询用户变化
 	public boolean chsure(){
-		boolean li = userold.equals(usernow);
-		System.out.println(li);
-		for(String user:userold){
-			//if(user!=null)
-				System.out.println("old"+user);
-		}
-		for(String user:usernow){
-			//if(user!=null)
-				System.out.println("new"+user);
-		}
+		boolean li = Arrays.equals(userold, usernow);
 		return li;
 	}
 	
@@ -111,14 +103,13 @@ public class MetanList extends Thread{
 			}
 		return i;
 	}
-	
-	
+
 		
 	public void run(){
 		try {
 			while(true){
 				Metan();
-				if(!chsure()){
+				if(!chsure()){System.out.println("me");
 					baby(userold);
 					older(userold);
 					userold = usernow;
@@ -128,8 +119,6 @@ public class MetanList extends Thread{
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			closeutil.closeAll(out,cilent);
-			e.printStackTrace();
-
 		}
 	}
 	
