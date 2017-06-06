@@ -126,13 +126,12 @@ public class server {
 				e.printStackTrace();
 			}
 			cilent.close();
-		}else if(mes.startsWith("to-")){
+		}else if(mes.startsWith("To-")){
 			String[] me = null;
 			me = mes.split("-|:");
 			for(String user:namelist){
 				if(user.equals(me[1])){
-					System.out.println(me[3]+"-"+me[2]);
-					list.get(namelist.indexOf(user)).send("chat*"+me[3]+"*"+me[2]);
+					list.get(namelist.indexOf(user)).send("chat~"+me[3]+"-"+me[2]);
 				}
 			}
 		}else{
@@ -145,15 +144,6 @@ public class server {
 		}
 
 	}
-	/*
-	//私聊
-	private void sendWho(){
-		String mes = this.recieve();
-		for(String temp:namelist){
-			if(temp == na)
-				
-		}
-	}*/
 	//run
 	public void run(){
 		

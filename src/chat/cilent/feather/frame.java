@@ -65,7 +65,7 @@ public class frame extends Frame implements ActionListener{
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(list)){
 			text.setForeground(Color.PINK);
-			text.append("to-"+e.getActionCommand()+":");
+			text.append("To-"+e.getActionCommand()+":");
 		}
 		if(e.getSource().equals(send)){
 			
@@ -81,7 +81,8 @@ public class frame extends Frame implements ActionListener{
 					e1.printStackTrace();
 				}
 			}else{
-				rece.append(name+"-"+s+"\n");
+				text.setText("");
+				rece.append(name+"--"+s+"\n");
 				try {
 					out.writeUTF(name+"--"+s);
 				} catch (IOException e1) {
@@ -108,31 +109,7 @@ public class frame extends Frame implements ActionListener{
 	public static void rmList(String user){
 		list.remove(user);
 	}
-/*
-//维护列表
-class MetaList {
-	List list;
-	MetanList mentan = new MetanList();
-	public MetaList(List list) throws SQLException{
-		this.list = list;
-		new Thread(new MetanList()).start();
-	}
-	public void add(){
-		String[] li = list.getSelectedItems();
-		String[] alive = mentan.newUser(li);
-		for(int i = 0;i < alive.length;i++){
-			list.add(alive[i]);
-			System.out.println(alive[i]);
-		}
-			
-	}
-	public void rem(){
-		String[] li = list.getSelectedItems();
-		String[] died = mentan.die(li);
-		for(int i = 0;i < died.length;i++)
-			list.remove(died[i]);
-	}
-}*/
+
 
 //默认关闭
 class WinCilent extends WindowAdapter{

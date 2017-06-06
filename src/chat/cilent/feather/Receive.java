@@ -29,9 +29,9 @@ class Receive implements Runnable{
 			}else if(mes.equals("@list$#")){
 				while(!(mes = in.readUTF()).equals("$#list@"))
 					frame.rmList(mes);	
-			}else if(mes.startsWith("chat*")){
+			}else if(mes.startsWith("chat~")){
 				String[] me = null;
-				me = mes.split("\\*");
+				me = mes.split("~|-");
 				
 				frame.put("Chat~"+me[1]+"-tell:"+me[2]);
 			}else if(!mes.equals(""))

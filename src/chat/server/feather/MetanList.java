@@ -31,8 +31,17 @@ public class MetanList extends Thread{
 		usernow = con.seaUserIn();
 	}
 	//查询用户变化
-	public boolean chsure(String[] list){
-		boolean li = list.equals(usernow);
+	public boolean chsure(){
+		boolean li = userold.equals(usernow);
+		System.out.println(li);
+		for(String user:userold){
+			//if(user!=null)
+				System.out.println("old"+user);
+		}
+		for(String user:usernow){
+			//if(user!=null)
+				System.out.println("new"+user);
+		}
 		return li;
 	}
 	
@@ -52,8 +61,10 @@ public class MetanList extends Thread{
 		if(alive.length > 0){
 			out.writeUTF("list@$#");
 			for(String user:alive){
-				if(user!=null)
-				out.writeUTF(user);
+				if(user!=null){
+					out.writeUTF(user);
+				}
+					
 			}
 			out.writeUTF("@$#list");
 		}
@@ -107,10 +118,11 @@ public class MetanList extends Thread{
 		try {
 			while(true){
 				Metan();
-				if(!chsure(userold)){
+				if(!chsure()){
 					baby(userold);
 					older(userold);
-					userold = usernow.clone();
+					userold = usernow;
+					
 			}
 			}
 		} catch (Exception e) {
